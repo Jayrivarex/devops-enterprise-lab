@@ -1,0 +1,15 @@
+# Terraform local state and binaries
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+.terraform.lock.hcl
+
+# OS & IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Build artifacts
+dist/
+build/

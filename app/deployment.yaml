@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-demo-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp-demo
+  template:
+    metadata:
+      labels:
+        app: webapp-demo
+    spec:
+      imagePullSecrets:
+      - name: acr-secret
+      containers:
+      - name: webapp
+        image: acrenterpriselabjay2026.azurecr.io/webapp-demo:v1
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-demo-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: webapp-demo
