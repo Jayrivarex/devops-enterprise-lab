@@ -1,0 +1,25 @@
+name: 'Setup DevOps Build Tools'
+description: 'Instala y configura Node.js, Docker CLI y Cosign'
+
+inputs:
+  node-version:
+    description: 'Versión de Node.js'
+    required: false
+    default: '18'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Node.js Environment
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: Install Cosign
+      uses: sigstore/cosign-installer@v3.4.0
+
+    - name: Verify CLI Tools
+      shell: bash
+      run: |
+        node --version
+        cosign version
