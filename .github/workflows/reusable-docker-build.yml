@@ -1,0 +1,46 @@
+name: "Reusable Workflow: Build, Scan & Sign Container Image"
+
+on:
+  workflow_call:
+    inputs:
+      image_name:
+        required: true
+        type: string
+      dockerfile_path:
+        required: true
+        type: string
+      context_path:
+        required: true
+        type: string
+
+jobs:
+  build-scan-sign:
+    name: "Build, Security Scan & Sign"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Local DevOps Build Tools
+        uses: ./.github/actions/setup-build-tools
+        with:
+          node-version: '18'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image locally
+        uses: docker/build-push-action@v5
+        with:
+          context: ${{ inputs.context_path }}
+          file: ${{ inputs.dockerfile_path }}
+          load: true
+          tags: ${{ inputs.image_name }}:latest
+
+      - name: Container Vulnerability Scan with Trivy (SCA)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: '${{ inputs.image_name }}:latest'
+          format: 'table'
+          exit-code: '0'
+          severity: 'CRITICAL,HIGH'

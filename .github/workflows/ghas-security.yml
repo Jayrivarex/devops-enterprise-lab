@@ -1,4 +1,4 @@
-name: "GHAS DevSecOps: SAST & SCA Audits"
+name: "DevSecOps Enterprise CI/CD Pipeline"
 
 on:
   push:
@@ -14,7 +14,6 @@ jobs:
       actions: read
       contents: read
       security-events: write
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -28,3 +27,12 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:javascript"
+
+  backend-container-pipeline:
+    name: "Backend Container CI"
+    needs: codeql-sast-scan
+    uses: ./.github/workflows/reusable-docker-build.yml
+    with:
+      image_name: "interbank-backend-api"
+      dockerfile_path: "src/backend/Dockerfile"
+      context_path: "src/backend"
