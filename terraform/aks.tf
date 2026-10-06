@@ -1,5 +1,7 @@
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "aks-enterprise-lab-dev"
+  count = var.enable_aks ? 1 : 0
+
+  name                = "aks-enterprise-lab-${var.environment}"
   location            = var.location
   resource_group_name = var.resource_group_name
   dns_prefix          = "aksenterprise-lab"
