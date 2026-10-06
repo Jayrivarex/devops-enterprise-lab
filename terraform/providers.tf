@@ -7,6 +7,13 @@ terraform {
       version = "~> 3.100.0"
     }
   }
+
+  backend "azurerm" {
+    resource_group_name  = "1-82432339-playground-sandbox"
+    storage_account_name = "sttfstatejay202601"
+    container_name       = "tfstate"
+    key                  = "terraform.tfstate"
+  }
 }
 
 provider "azurerm" {
