@@ -4,8 +4,8 @@ output "acr_login_server" {
 }
 
 output "aks_cluster_name" {
-  value       = azurerm_kubernetes_cluster.aks.name
-  description = "Nombre del clúster AKS desplegado."
+  value       = var.enable_aks ? azurerm_kubernetes_cluster.aks[0].name : "AKS is disabled in this sandbox environment"
+  description = "Nombre del clúster AKS desplegado (si está habilitado)."
 }
 
 output "apim_gateway_url" {
