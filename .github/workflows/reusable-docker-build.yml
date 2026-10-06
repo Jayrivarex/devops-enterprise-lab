@@ -32,7 +32,7 @@ jobs:
       - name: Build Docker Image locally
         uses: docker/build-push-action@v5
         with:
-          context: .
+          context: ${{ inputs.context_path }}
           file: ${{ inputs.dockerfile_path }}
           load: true
           tags: ${{ inputs.image_name }}:latest
